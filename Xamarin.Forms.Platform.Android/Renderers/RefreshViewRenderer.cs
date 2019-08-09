@@ -15,40 +15,31 @@
 using System;
 using System.ComponentModel;
 using System.Reflection;
+using Android.Content;
 using Android.Runtime;
 using Android.Support.V4.Widget;
 using Android.Views;
-using Refractored.XamForms.PullToRefresh;
-using Refractored.XamForms.PullToRefresh.Droid;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
+using AView = Android.Views.View;
 
-
-[assembly: ExportRenderer(typeof(PullToRefreshLayout), typeof(PullToRefreshLayoutRenderer))]
-namespace Refractored.XamForms.PullToRefresh.Droid
+namespace Xamarin.Forms.Platform.Android
 {
     /// <summary>
     /// Pull to refresh layout renderer.
     /// </summary>
     [Preserve(AllMembers = true)]
-    public class PullToRefreshLayoutRenderer : SwipeRefreshLayout,
+    public class RefreshViewRenderer : SwipeRefreshLayout,
         IVisualElementRenderer,
         SwipeRefreshLayout.IOnRefreshListener
     {
-        /// <summary>
-        /// Used for registration with dependency service
-        /// </summary>
-        public async static void Init()
-        {
-            var temp = DateTime.Now;
-        }
 
         /// <summary>
         /// Initializes a new instance of the
-        /// <see cref="Refractored.XamForms.PullToRefresh.Droid.PullToRefreshLayoutRenderer"/> class.
+        /// <see cref="Refractored.XamForms.PullToRefresh.Droid.RefreshViewRenderer"/> class.
         /// </summary>
-        public PullToRefreshLayoutRenderer()
-            : base(Forms.Context)
+        public RefreshViewRenderer(Context context)
+            : base(context)
         {
             
         }
@@ -108,7 +99,7 @@ namespace Refractored.XamForms.PullToRefresh.Droid
             if (packed != null)
                 RemoveView(packed.View);
 
-            packed = Platform.CreateRenderer(RefreshView.Content);
+            packed = Platform.CreateRendererWithContext(RefreshView.Content, Context);
 
             try
             {
@@ -158,7 +149,7 @@ namespace Refractored.XamForms.PullToRefresh.Droid
         bool refreshing;
         /// <summary>
         /// Gets or sets a value indicating whether this
-        /// <see cref="Refractored.XamForms.PullToRefresh.Droid.PullToRefreshLayoutRenderer"/> is refreshing.
+        /// <see cref="Refractored.XamForms.PullToRefresh.Droid.RefreshViewRenderer"/> is refreshing.
         /// </summary>
         /// <value><c>true</c> if refreshing; otherwise, <c>false</c>.</value>
         public override bool Refreshing
@@ -182,7 +173,7 @@ namespace Refractored.XamForms.PullToRefresh.Droid
 
                     base.Refreshing = refreshing;
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                 }
             }
@@ -206,7 +197,7 @@ namespace Refractored.XamForms.PullToRefresh.Droid
             CanScrollUp(packed.View);
         
 
-        bool CanScrollUp(Android.Views.View view)
+        bool CanScrollUp(AView view)
         {
             var viewGroup = view as ViewGroup;
             if (viewGroup == null)
@@ -227,9 +218,9 @@ namespace Refractored.XamForms.PullToRefresh.Droid
             for (int i = 0; i < viewGroup.ChildCount; i++)
             {
                 var child = viewGroup.GetChildAt(i);
-                if (child is Android.Widget.AbsListView)
+                if (child is global::Android.Widget.AbsListView)
                 {
-                    var list = child as Android.Widget.AbsListView;
+                    var list = child as global::Android.Widget.AbsListView;
                     if (list != null)
                     {
                         if (list.FirstVisiblePosition == 0)
@@ -244,17 +235,17 @@ namespace Refractored.XamForms.PullToRefresh.Droid
                     }
 
                 }
-                else if (child is Android.Widget.ScrollView)
+                else if (child is global::Android.Widget.ScrollView)
                 {
-                    var scrollview = child as Android.Widget.ScrollView;
+                    var scrollview = child as global::Android.Widget.ScrollView;
                     return (scrollview.ScrollY <= 0.0);
                 }
-                else if (child is Android.Webkit.WebView)
+                else if (child is global::Android.Webkit.WebView)
                 {
-                    var webView = child as Android.Webkit.WebView;
+                    var webView = child as global::Android.Webkit.WebView;
                     return (webView.ScrollY > 0.0);
                 }
-                else if (child is Android.Support.V4.Widget.SwipeRefreshLayout)
+                else if (child is global::Android.Support.V4.Widget.SwipeRefreshLayout)
                 {
                     return CanScrollUp(child as ViewGroup);
                 }
@@ -271,8 +262,8 @@ namespace Refractored.XamForms.PullToRefresh.Droid
         /// Will throw an exception if the Element is not correct
         /// </summary>
         /// <value>The refresh view.</value>
-        public Refractored.XamForms.PullToRefresh.PullToRefreshLayout RefreshView =>
-            Element == null ? null : (PullToRefreshLayout)Element;
+        public RefreshView RefreshView =>
+            Element == null ? null : (RefreshView)Element;
 
         /// <summary>
         /// The refresh view has been refreshed
@@ -296,15 +287,18 @@ namespace Refractored.XamForms.PullToRefresh.Droid
         {
             if (e.PropertyName == "Content")
                 UpdateContent();
-            else if (e.PropertyName == PullToRefreshLayout.IsPullToRefreshEnabledProperty.PropertyName)
+            else if (e.PropertyName == RefreshView.IsPullToRefreshEnabledProperty.PropertyName)
                 UpdateIsSwipeToRefreshEnabled();
-            else if (e.PropertyName == PullToRefreshLayout.IsRefreshingProperty.PropertyName)
+            else if (e.PropertyName == RefreshView.IsRefreshingProperty.PropertyName)
                 UpdateIsRefreshing();
-            else if (e.PropertyName == PullToRefreshLayout.RefreshColorProperty.PropertyName)
+            else if (e.PropertyName == RefreshView.RefreshColorProperty.PropertyName)
                 UpdateColors();
-            else if (e.PropertyName == PullToRefreshLayout.RefreshBackgroundColorProperty.PropertyName)
+            else if (e.PropertyName == RefreshView.RefreshBackgroundColorProperty.PropertyName)
                 UpdateColors();
-        }
+
+			ElementPropertyChanged?.Invoke(sender, e);
+
+		}
 
         /// <summary>
         /// Gets the size of the desired.
@@ -337,10 +331,10 @@ namespace Refractored.XamForms.PullToRefresh.Droid
         /// Gets the view group.
         /// </summary>
         /// <value>The view group.</value>
-        public Android.Views.ViewGroup ViewGroup => this;
+        public global::Android.Views.ViewGroup ViewGroup => this;
 
 
-        public Android.Views.View View => this;
+        public AView View => this;
 
         /// <summary>
         /// Gets the element.

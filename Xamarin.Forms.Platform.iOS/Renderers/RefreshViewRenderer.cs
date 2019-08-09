@@ -14,34 +14,21 @@
  */
 using System;
 using System.ComponentModel;
-using System.Diagnostics;
-using System.Windows.Input;
 using Foundation;
-using Refractored.XamForms.PullToRefresh;
-using Refractored.XamForms.PullToRefresh.iOS;
 using UIKit;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.iOS;
 
 
-[assembly: ExportRenderer(typeof(PullToRefreshLayout), typeof(PullToRefreshLayoutRenderer))]
-namespace Refractored.XamForms.PullToRefresh.iOS
+namespace Xamarin.Forms.Platform.iOS
 {
 
     /// <summary>
     /// Pull to refresh layout renderer.
     /// </summary>
     [Preserve(AllMembers = true)]
-    public class PullToRefreshLayoutRenderer : ViewRenderer<PullToRefreshLayout, UIView>
+    public class RefreshViewRenderer : ViewRenderer<RefreshView, UIView>
     {
-
-        /// <summary>
-        /// Used for registration with dependency service
-        /// </summary>
-        public async static void Init()
-        {
-            var temp = DateTime.Now;
-        }
 
         UIRefreshControl refreshControl;
         UIView refreshControlParent;
@@ -51,7 +38,7 @@ namespace Refractored.XamForms.PullToRefresh.iOS
         /// Raises the element changed event.
         /// </summary>
         /// <param name="e">E.</param>
-        protected override void OnElementChanged(ElementChangedEventArgs<Refractored.XamForms.PullToRefresh.PullToRefreshLayout> e)
+        protected override void OnElementChanged(ElementChangedEventArgs<RefreshView> e)
         {
             base.OnElementChanged(e);
 
@@ -266,7 +253,7 @@ namespace Refractored.XamForms.PullToRefresh.iOS
         /// Will throw an exception if the Element is not correct
         /// </summary>
         /// <value>The refresh view.</value>
-        public Refractored.XamForms.PullToRefresh.PullToRefreshLayout RefreshView
+        public RefreshView RefreshView
         {
             get { return Element; }
         }
@@ -316,13 +303,13 @@ namespace Refractored.XamForms.PullToRefresh.iOS
         protected override void OnElementPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             base.OnElementPropertyChanged(sender, e);
-            if (e.PropertyName == PullToRefreshLayout.IsPullToRefreshEnabledProperty.PropertyName)
+            if (e.PropertyName == RefreshView.IsPullToRefreshEnabledProperty.PropertyName)
                 UpdateIsSwipeToRefreshEnabled();
-            else if (e.PropertyName == PullToRefreshLayout.IsRefreshingProperty.PropertyName)
+            else if (e.PropertyName == RefreshView.IsRefreshingProperty.PropertyName)
                 UpdateIsRefreshing();
-            else if (e.PropertyName == PullToRefreshLayout.RefreshColorProperty.PropertyName)
+            else if (e.PropertyName == RefreshView.RefreshColorProperty.PropertyName)
                 UpdateColors();
-            else if (e.PropertyName == PullToRefreshLayout.RefreshBackgroundColorProperty.PropertyName)
+            else if (e.PropertyName == RefreshView.RefreshBackgroundColorProperty.PropertyName)
                 UpdateColors();
         }
 

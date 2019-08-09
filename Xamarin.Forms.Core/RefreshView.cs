@@ -16,18 +16,17 @@
 using System;
 using System.Windows.Input;
 using Xamarin.Forms;
+using Xamarin.Forms.Platform;
 
-namespace Refractored.XamForms.PullToRefresh
+namespace Xamarin.Forms
 {
-    /// <summary>
-    /// Pull to refresh layout.
-    /// </summary>
-    public class PullToRefreshLayout : ContentView
+	[RenderWith(typeof(_RefreshViewRenderer))]
+	public class RefreshView : ContentView
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="Refractored.XamForms.PullToRefresh.PullToRefreshLayout"/> class.
+        /// Initializes a new instance of the <see cref="Refractored.XamForms.PullToRefresh.RefreshView"/> class.
         /// </summary>
-        public PullToRefreshLayout()
+        public RefreshView()
         {
             IsClippedToBounds = true;
             VerticalOptions = LayoutOptions.FillAndExpand;
@@ -38,7 +37,7 @@ namespace Refractored.XamForms.PullToRefresh
         /// The is refreshing property.
         /// </summary>
         public static readonly BindableProperty IsRefreshingProperty =
-            BindableProperty.Create(nameof(IsRefreshing), typeof(bool), typeof(PullToRefreshLayout), false);
+            BindableProperty.Create(nameof(IsRefreshing), typeof(bool), typeof(RefreshView), false);
 
         /// <summary>
         /// Gets or sets a value indicating whether this instance is refreshing.
@@ -60,7 +59,7 @@ namespace Refractored.XamForms.PullToRefresh
         /// The is pull to refresh enabled property.
         /// </summary>
         public static readonly BindableProperty IsPullToRefreshEnabledProperty =
-            BindableProperty.Create(nameof(IsPullToRefreshEnabled), typeof(bool), typeof(PullToRefreshLayout), true);
+            BindableProperty.Create(nameof(IsPullToRefreshEnabled), typeof(bool), typeof(RefreshView), true);
 
         /// <summary>
         /// Gets or sets a value indicating whether this instance is pull to refresh enabled.
@@ -77,7 +76,7 @@ namespace Refractored.XamForms.PullToRefresh
         /// The refresh command property.
         /// </summary>
         public static readonly BindableProperty RefreshCommandProperty =
-            BindableProperty.Create(nameof(RefreshCommand), typeof(ICommand), typeof(PullToRefreshLayout));
+            BindableProperty.Create(nameof(RefreshCommand), typeof(ICommand), typeof(RefreshView));
 
         /// <summary>
         /// Gets or sets the refresh command.
@@ -95,9 +94,9 @@ namespace Refractored.XamForms.PullToRefresh
         public static readonly BindableProperty RefreshCommandParameterProperty =
             BindableProperty.Create(nameof(RefreshCommandParameter),
                 typeof(object),
-                typeof(PullToRefreshLayout),
+                typeof(RefreshView),
                 null,
-                propertyChanged: (bindable, oldvalue, newvalue) => ((PullToRefreshLayout)bindable).RefreshCommandCanExecuteChanged(bindable, EventArgs.Empty));
+                propertyChanged: (bindable, oldvalue, newvalue) => ((RefreshView)bindable).RefreshCommandCanExecuteChanged(bindable, EventArgs.Empty));
 
         /// <summary>
         /// Gets or sets the Refresh command parameter
@@ -124,7 +123,7 @@ namespace Refractored.XamForms.PullToRefresh
         /// Color property of refresh spinner color 
         /// </summary>
         public static readonly BindableProperty RefreshColorProperty =
-            BindableProperty.Create(nameof(RefreshColor), typeof(Color), typeof(PullToRefreshLayout), Color.Default);
+            BindableProperty.Create(nameof(RefreshColor), typeof(Color), typeof(RefreshView), Color.Default);
 
         /// <summary>
         /// Refresh  color
@@ -141,7 +140,7 @@ namespace Refractored.XamForms.PullToRefresh
         /// Color property of refresh background color
         /// </summary>
         public static readonly BindableProperty RefreshBackgroundColorProperty =
-            BindableProperty.Create(nameof(RefreshBackgroundColor), typeof(Color), typeof(PullToRefreshLayout), Color.Default);
+            BindableProperty.Create(nameof(RefreshBackgroundColor), typeof(Color), typeof(RefreshView), Color.Default);
 
         /// <summary>
         /// Refresh background color

@@ -154,6 +154,9 @@ namespace Xamarin.Forms.Platform
 	[RenderWith (typeof (PhoneMasterDetailRenderer))]
 #endif
 	internal class _MasterDetailPageRenderer { }
+
+	[RenderWith(typeof(RefreshViewRenderer))]
+	internal class _RefreshViewRenderer { }
 }
 
 
