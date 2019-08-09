@@ -324,6 +324,7 @@
     <Compile Include="StepperRendererManager.cs" />
     <Compile Include="AppCompat\CheckBoxRenderer.cs" />
     <Compile Include="AppCompat\CheckBoxDesignerRenderer.cs" />
+    <Compile Include="Renderers\PullToRefreshLayoutRenderer.android.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
